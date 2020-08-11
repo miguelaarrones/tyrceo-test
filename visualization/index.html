@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Draw GeoJSON points</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css" rel="stylesheet" />
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoiam1jYXJyYXNjb3NhIiwiYSI6ImNrZGlvcmIzMzA3MW0zMG50dG90NWJ0aTEifQ.ZoobdVV5OqJUUVH-k2ZHDg\n';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/light-v10',
+        center: [2.9179, 39.6183],
+        zoom: 8
+    });
+
+    map.on('load', function() {
+// Add a GeoJSON source with 2 points
+                map.addSource('my_data', { type: 'geojson', data: "http://localhost:8000/data_wrangling/points.geojson"});
+
+// Add a symbol layer
+                map.addLayer({
+                    'id': 'points',
+                    'type': 'circle',
+                    'source': 'my_data',
+                    'paint': {
+// color circles by ethnicity, using a match expression
+// https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-match
+                        'circle-color': [
+                            'match',
+                            ['get', 'Pokemon'],
+                            'BULBASAUR',
+                            '#1BFF00',
+                            'CHARMANDER',
+                            '#FF0000',
+                            'SQUIRTLE',
+                            '#0081FF',
+                            /* other */ '#ccc'
+                        ]
+                    }
+                });
+    });
+</script>
+
+</body>
+</html>
