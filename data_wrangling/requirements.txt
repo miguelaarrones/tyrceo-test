@@ -1,2 +1,3 @@
 PyMySQL~=0.10.0
 geojson~=2.5.0
+jellyfish~=0.8.2
