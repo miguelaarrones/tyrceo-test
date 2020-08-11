@@ -1,5 +1,6 @@
 import pymysql.cursors
 import geojson
+from jellyfish import soundex
 
 connection = pymysql.connect(host='35.187.55.190',
                              user='candidate',
@@ -19,6 +20,13 @@ try:
         features = []
         for row in result:
             point = geojson.Point((row['longitude'], row['latitude']))
+
+            if soundex(row['pokemon']) == soundex("Bulbasaur"):
+                row['pokemon'] = "Bulbasaur"
+            elif soundex(row['pokemon']) == soundex("Charmander"):
+                row['pokemon'] = "Charmander"
+            elif soundex(row['pokemon']) == soundex("Squirtle"):
+                row['pokemon'] = "Squirtle"
             features.append(geojson.Feature(geometry=point, properties={"Pokemon": row['pokemon'].upper(),
                                                                         "Score": row['score']}))
 
